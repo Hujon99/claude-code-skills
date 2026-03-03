@@ -9,51 +9,70 @@ Copy the `.md` file into `.claude/commands/` inside that project.
 
 **Global** (available in every project):
 Copy the `.md` file into `~/.claude/commands/` on your machine.
+On Windows: `C:\Users\HugoJönsson\.claude\commands\`
 
 ## Skills in this collection
 
-| Skill | File | Scope | Description |
+### Global (available in every project)
+| Skill | File | Trigger | Description |
 |---|---|---|---|
-| `/deploy` | `titanx/deploy.md` | Titan X project | Push current branch, watch CI/CD, report live URL |
-| `/new-station` | `titanx/new-station.md` | Titan X project | Scaffold a new factory station app following Titan X patterns |
+| `/skill-creator` | `global/skill-creator.md` | "create a skill", "make a new skill", "build a slash command" | Full Anthropic framework: draft → test → eval → iterate → publish. Use this to create any new skill. Source: [anthropics/skills](https://github.com/anthropics/skills/tree/main/skills/skill-creator) |
+
+### Project-specific
+| Skill | File | Project | Description |
+|---|---|---|---|
+| `/deploy` | `titanx/deploy.md` | Titan X | Push current branch, watch CI/CD, report live URL |
+| `/new-station` | `titanx/new-station.md` | Titan X | Scaffold a new factory station app following Titan X patterns |
+
+## Installation status
+
+| Skill | Global (`~/.claude/commands/`) | Project (`.claude/commands/`) |
+|---|---|---|
+| `skill-creator` | ✅ installed | — |
+| `deploy` (Titan X) | — | ✅ in titanx repo |
+| `new-station` (Titan X) | — | ✅ in titanx repo |
+
+## How to add a new skill
+
+The best way is to use `/skill-creator` — it walks you through the whole process:
+draft → write test cases → run evals → iterate → optimise the trigger description.
+
+Manual approach:
+1. Create a `.md` file — filename = command name (e.g. `deploy.md` → `/deploy`)
+2. Add YAML frontmatter with `name` and `description` (description controls when it triggers)
+3. Write instructions in markdown — Claude follows them when you invoke the command
+4. Include a "Recommended MCPs" section so future-you knows what to set up
+5. Put global skills in `global/`, project-specific in a folder named after the project
+6. Commit and push to keep the collection in sync
 
 ## Recommended global MCPs
 
-These MCP servers are worth installing globally — they add Claude Code capabilities
-that are useful across most projects.
-
-### Install globally
+These are worth installing once on your machine — they add capabilities useful across all projects.
 
 ```bash
 # GitHub — PR management, issue creation, workflow monitoring
 claude mcp add github -- npx -y @modelcontextprotocol/server-github
+# Requires: GITHUB_TOKEN environment variable
 
-# Filesystem — read/write local files (usually already built-in)
-# Built into Claude Code by default
+# Fetch — let Claude read web pages and documentation
+claude mcp add fetch -- npx -y @modelcontextprotocol/server-fetch
 ```
 
 ### Per-project MCPs
 
 | MCP | When to add | Command |
 |---|---|---|
-| **mssql** | Any project with Azure SQL / SQL Server | `claude mcp add mssql` + connection string |
-| **Postgres** | Any project with PostgreSQL | `claude mcp add postgres -- npx @modelcontextprotocol/server-postgres <conn>` |
-| **Fetch** | When you need Claude to read web pages or docs | `claude mcp add fetch -- npx @modelcontextprotocol/server-fetch` |
-
-## How to add a new skill
-
-1. Create a `.md` file — filename = command name (e.g. `deploy.md` → `/deploy`)
-2. Write instructions in markdown — Claude will follow them when you invoke the command
-3. Include a "Recommended MCPs" section so future-you knows what to set up
-4. Commit and push to keep the collection in sync
+| **mssql** | Azure SQL / SQL Server projects | `claude mcp add mssql` + connection string |
+| **Postgres** | PostgreSQL projects | `claude mcp add postgres -- npx @modelcontextprotocol/server-postgres <conn>` |
 
 ## Structure
 
 ```
 claude-skills/
 ├── README.md
-├── titanx/             # Titan X production tracking project
-│   ├── deploy.md       # /deploy
-│   └── new-station.md  # /new-station
-└── global/             # Skills useful across any project (future)
+├── global/                     # Skills installed globally (~/.claude/commands/)
+│   └── skill-creator.md        # /skill-creator — create and test new skills
+└── titanx/                     # Titan X production tracking project
+    ├── deploy.md               # /deploy
+    └── new-station.md          # /new-station
 ```
