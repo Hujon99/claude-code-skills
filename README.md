@@ -32,6 +32,17 @@ On Windows: `C:\Users\HugoJönsson\.claude\commands\`
 | `deploy` (Titan X) | — | ✅ in titanx repo |
 | `new-station` (Titan X) | — | ✅ in titanx repo |
 
+## MCP servers
+
+See **[MCP-REFERENCE.md](MCP-REFERENCE.md)** for the full guide — what to install globally,
+what to install per project, credentials needed, and current status on this machine.
+
+**Quick start — install these globally first:**
+```bash
+claude mcp add github -e GITHUB_TOKEN=<your-pat> -- npx -y @modelcontextprotocol/server-github
+claude mcp add fetch -- npx -y @modelcontextprotocol/server-fetch
+```
+
 ## How to add a new skill
 
 The best way is to use `/skill-creator` — it walks you through the whole process:
@@ -45,31 +56,12 @@ Manual approach:
 5. Put global skills in `global/`, project-specific in a folder named after the project
 6. Commit and push to keep the collection in sync
 
-## Recommended global MCPs
-
-These are worth installing once on your machine — they add capabilities useful across all projects.
-
-```bash
-# GitHub — PR management, issue creation, workflow monitoring
-claude mcp add github -- npx -y @modelcontextprotocol/server-github
-# Requires: GITHUB_TOKEN environment variable
-
-# Fetch — let Claude read web pages and documentation
-claude mcp add fetch -- npx -y @modelcontextprotocol/server-fetch
-```
-
-### Per-project MCPs
-
-| MCP | When to add | Command |
-|---|---|---|
-| **mssql** | Azure SQL / SQL Server projects | `claude mcp add mssql` + connection string |
-| **Postgres** | PostgreSQL projects | `claude mcp add postgres -- npx @modelcontextprotocol/server-postgres <conn>` |
-
 ## Structure
 
 ```
 claude-skills/
 ├── README.md
+├── MCP-REFERENCE.md            # Full MCP install guide (all tiers, credentials, status)
 ├── global/                     # Skills installed globally (~/.claude/commands/)
 │   └── skill-creator.md        # /skill-creator — create and test new skills
 └── titanx/                     # Titan X production tracking project
